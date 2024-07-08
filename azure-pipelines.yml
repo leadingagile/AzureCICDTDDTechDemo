@@ -42,20 +42,22 @@ stages:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
         
-    - task: DotNetCoreCLI@2
+#    - task: DotNetCoreCLI@2
+#      inputs:
+#        command: publish
+#        publishWebProjects: True 
+#        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+#        zipAfterPublish: True 
+    - task: DotNetCoreCLI@2 #https://learn.microsoft.com/en-us/training/modules/create-release-pipeline/5-deploy-to-appservice
       inputs:
         command: publish
-        publishWebProjects: True
-        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        projects: '**/*.csproj' #instead, probably should set to only the webapp project
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
         zipAfterPublish: True 
+
     - publish: $(Build.ArtifactStagingDirectory)
       artifact: drop
-
-  #  - task: PublishBuildArtifacts@1
-  #    inputs:
- #       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
- #       ArtifactName: 'drop'
- #       publishLocation: 'Container'
 
 - stage: Deploy_to_Test
   displayName: Deploy to Test Stage
@@ -63,17 +65,20 @@ stages:
   - job: Deploy
     displayName: Deploy Stage
     steps:
-    - task: DownloadBuildArtifacts@0
-      inputs:
-        buildType: 'current'
-        downloadType: 'single'
-        artifactName: 'drop'
-        downloadPath: '$(System.ArtifactsDirectory)'    
+    - download: current
+      artifact: drop
+    #- task: DownloadBuildArtifacts@0
+    #  inputs:
+    #    buildType: 'current'
+    #    downloadType: 'single'
+    #    artifactName: 'drop'
+    #    downloadPath: '$(System.ArtifactsDirectory)'    
     - task: AzureWebApp@1
       inputs:
         azureSubscription: 'Azure subscription 1(5b2d29c4-2e1c-4bfc-9da0-f0226643249b)'
         appType: 'webApp'
         appName: 'PigLatinTesting'
-        package: '$(System.ArtifactsDirectory)/**/*.zip'
-        deploymentMethod: 'auto'
+        #package: '$(System.ArtifactsDirectory)/**/*.zip'
+        package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+        #deploymentMethod: 'auto'
         
