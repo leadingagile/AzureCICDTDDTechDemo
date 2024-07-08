@@ -48,12 +48,13 @@ stages:
         publishWebProjects: True
         arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: True 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
-        TargetPath: '$(System.DefaultWorkingDirectory)'
+    - publish: $(Build.ArtifactStagingDirectory)
+
+  #  - task: PublishBuildArtifacts@1
+  #    inputs:
+ #       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+ #       ArtifactName: 'drop'
+ #       publishLocation: 'Container'
 
 - stage: Deploy_to_Test
   displayName: Deploy to Test Stage
@@ -61,6 +62,12 @@ stages:
   - job: Deploy
     displayName: Deploy Stage
     steps:
+    - task: DownloadBuildArtifacts@0
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        artifactName: 'drop'
+        downloadPath: '$(System.ArtifactsDirectory)'    
     - task: AzureWebApp@1
       inputs:
         azureSubscription: 'Azure subscription 1(5b2d29c4-2e1c-4bfc-9da0-f0226643249b)'
