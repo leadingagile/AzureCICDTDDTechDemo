@@ -53,6 +53,7 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+        TargetPath: '$(System.DefaultWorkingDirectory)'
 
 - stage: Deploy_to_Test
   displayName: Deploy to Test Stage
@@ -67,3 +68,4 @@ stages:
         appName: 'PigLatinTesting'
         package: '$(System.DefaultWorkingDirectory)/**/*.zip'
         deploymentMethod: 'auto'
+        
