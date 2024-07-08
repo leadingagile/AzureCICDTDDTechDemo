@@ -49,6 +49,7 @@ stages:
         arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: True 
     - publish: $(Build.ArtifactStagingDirectory)
+      artifact: drop
 
   #  - task: PublishBuildArtifacts@1
   #    inputs:
