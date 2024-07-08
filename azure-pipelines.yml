@@ -48,12 +48,12 @@ stages:
         publishWebProjects: True
         arguments: '--configuration $(BuildConfiguration)'
         zipAfterPublish: True 
-    - task: PublishBuildArtifacts@1
-      inputs:
-        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-        ArtifactName: 'drop'
-        publishLocation: 'Container'
-        TargetPath: '$(System.DefaultWorkingDirectory)'
+ #   - task: PublishBuildArtifacts@1
+ #     inputs:
+ #       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+ #       ArtifactName: 'drop'
+ #       publishLocation: 'Container'
+ #       TargetPath: '$(System.DefaultWorkingDirectory)'
 
 - stage: Deploy_to_Test
   displayName: Deploy to Test Stage
