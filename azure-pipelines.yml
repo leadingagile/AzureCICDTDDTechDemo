@@ -74,6 +74,6 @@ stages:
         azureSubscription: 'Azure subscription 1(5b2d29c4-2e1c-4bfc-9da0-f0226643249b)'
         appType: 'webApp'
         appName: 'PigLatinTesting'
-        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        package: '$(System.ArtifactsDirectory)/**/*.zip'
         deploymentMethod: 'auto'
         
