@@ -2,6 +2,9 @@
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# 
+# background on yaml build pipelines versus classic: https://www.reddit.com/r/azuredevops/comments/166el30/stop_dont_use_azure_devops_release_pipelines/
+
 
 trigger:
 - master
@@ -38,3 +41,17 @@ stages:
       inputs:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
+
+- stage: Deploy_to_Test
+  displayName: Deploy to Test Stage
+  jobs:
+  - job: Deploy
+    displayName: Deploy Stage
+    steps:
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(5b2d29c4-2e1c-4bfc-9da0-f0226643249b)'
+        appType: 'webApp'
+        appName: 'PigLatinTesting'
+        package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+        deploymentMethod: 'auto'
