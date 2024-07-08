@@ -41,6 +41,13 @@ stages:
       inputs:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
+        
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: publish
+        publishWebProjects: True
+        arguments: '--configuration $(BuildConfiguration)'
+        zipAfterPublish: True 
 
 - stage: Deploy_to_Test
   displayName: Deploy to Test Stage
