@@ -1,0 +1,28 @@
+﻿@page "/"
+
+<PageTitle>Pig Latin Translator</PageTitle>
+
+<h1>Igpay Atinlay</h1>
+
+<p><input @bind="englishWord" /><button @onclick="OnTranslate">Translate</button></p>
+<p>@translatedWord</p>
+
+
+@code {
+    private PigLatinBlazor.TranslatorLogic.Translator translator = new();
+
+    private String englishWord = "";
+    private String translatedWord = "";
+
+    private void OnTranslate()
+    {
+        translatedWord = translator.Translate(englishWord);
+    }
+
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

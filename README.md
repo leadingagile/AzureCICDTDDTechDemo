@@ -1,1 +1,1 @@
-# PigLatinTranslator
+# PigLatinBlazor
