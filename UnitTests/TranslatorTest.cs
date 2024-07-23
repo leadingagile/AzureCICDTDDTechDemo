@@ -9,5 +9,10 @@ namespace PigLatinBlazor.TranslatorLogic
         {
             PigLatinBlazor.TranslatorLogic.Translator translator = new();
         }
+
+        [Fact]
+        public void TranslateWord2()
+        {
+        }
     }
 }
