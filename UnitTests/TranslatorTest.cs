@@ -12,7 +12,7 @@ namespace PigLatinBlazor.TranslatorLogic
         }
 
         [Fact]
-        public void TranslateWord2()
+        public void Translate2()
         {
             //Assert.Fail("Test fails in TranslateWord2");
 
