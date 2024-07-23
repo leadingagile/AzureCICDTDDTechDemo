@@ -48,6 +48,7 @@ stages:
         zipAfterPublish: True 
     - publish: $(Build.ArtifactStagingDirectory)
       artifact: drop
+      
 - stage: Deploy_to_Test
   displayName: Deploy to Test Stage
   jobs:
@@ -61,6 +62,4 @@ stages:
         azureSubscription: 'Azure subscription 1(5b2d29c4-2e1c-4bfc-9da0-f0226643249b)'
         appType: 'webApp'
         appName: 'PigLatinTesting'
-        #package: '$(System.ArtifactsDirectory)/**/*.zip'
         package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
-        #deploymentMethod: 'auto'
