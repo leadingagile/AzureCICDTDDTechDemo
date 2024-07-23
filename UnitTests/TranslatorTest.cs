@@ -5,7 +5,7 @@ namespace PigLatinBlazor.TranslatorLogic
     public class TranslatorTest
     {
         [Fact]
-        public void TranslateWord()
+        public void TranslateCat()
         {
             PigLatinBlazor.TranslatorLogic.Translator translator = new();
             Assert.Equal("catay", translator.Translate("cat"));
