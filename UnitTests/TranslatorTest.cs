@@ -14,6 +14,7 @@ namespace PigLatinBlazor.TranslatorLogic
         [Fact]
         public void TranslateWord2()
         {
+            Assert.Fail("Test fails in TranslateWord2");
         }
     }
 }
