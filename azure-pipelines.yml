@@ -25,11 +25,9 @@ stages:
     displayName: Build Stage
     steps:
     - task: NuGetToolInstaller@1
-
     - task: NuGetCommand@2
       inputs:
         restoreSolution: '$(solution)'
-
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
@@ -37,16 +35,10 @@ stages:
 #        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
-- stage: Unit Test
-  displayName: Run Unit Tests
-  steps:
     - task: VSTest@2
       inputs:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
-- stage: package
-  displayName: make package
-  steps:
     - task: DotNetCoreCLI@2 #https://learn.microsoft.com/en-us/training/modules/create-release-pipeline/5-deploy-to-appservice
       inputs:
         command: publish
@@ -56,7 +48,6 @@ stages:
         zipAfterPublish: True 
     - publish: $(Build.ArtifactStagingDirectory)
       artifact: drop
-
 - stage: Deploy_to_Test
   displayName: Deploy to Test Stage
   jobs:
