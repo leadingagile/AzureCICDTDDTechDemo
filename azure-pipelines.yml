@@ -33,7 +33,8 @@ stages:
     - task: VSBuild@1
       inputs:
         solution: '$(solution)'
-        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        msbuildArgs: '/p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip"'
+#        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
 
@@ -51,7 +52,7 @@ stages:
     - task: DotNetCoreCLI@2 #https://learn.microsoft.com/en-us/training/modules/create-release-pipeline/5-deploy-to-appservice
       inputs:
         command: publish
-        projects: '**/*.csproj' #instead, probably should set to only the webapp project
+        projects: '**/PigLatinBlazor.csproj' #set the webapp project
         publishWebProjects: false
         arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
         zipAfterPublish: True 
