@@ -4,7 +4,8 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 # 
 # background on yaml build pipelines versus classic: https://www.reddit.com/r/azuredevops/comments/166el30/stop_dont_use_azure_devops_release_pipelines/
-
+#
+# possible speedups: use Linux, and use DotNetCLI instead of VSBUild.
 
 trigger:
 - master
