@@ -11,7 +11,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   solution: '**/*.sln'
@@ -25,42 +25,14 @@ stages:
   - job: Build
     displayName: Build Stage
     steps:
-    - task: NuGetToolInstaller@1
-    - task: NuGetCommand@2
+    - task: DotNetCoreCLI@2
       inputs:
-        restoreSolution: '$(solution)'
-    - task: VSBuild@1
+        command: 'restore'
+        projects: '**/*.sln'
+        feedsToUse: 'select'
+    - task: DotNetCoreCLI@2
       inputs:
-        solution: '$(solution)'
-        msbuildArgs: '/p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip"'
-#        msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-    - task: VSTest@2
-      inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-    - task: DotNetCoreCLI@2 #https://learn.microsoft.com/en-us/training/modules/create-release-pipeline/5-deploy-to-appservice
-      inputs:
-        command: publish
-        projects: '**/PigLatinBlazor.csproj' #set to the webapp project name
-        publishWebProjects: false
-        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
-        zipAfterPublish: True 
-    - publish: $(Build.ArtifactStagingDirectory)
-      artifact: drop
-      
-- stage: Deploy_to_Test
-  displayName: Deploy to Test Stage
-  jobs:
-  - job: Deploy
-    displayName: Deploy Stage
-    steps:
-    - download: current
-      artifact: drop
-    - task: AzureWebApp@1
-      inputs:
-        azureSubscription: 'Azure subscription 1(5b2d29c4-2e1c-4bfc-9da0-f0226643249b)'
-        appType: 'webApp'
-        appName: 'PigLatinTesting'
-        package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+        command: 'test'
+        projects: '**/*.sln'
+        arguments: '--configuration Release'
+ 
