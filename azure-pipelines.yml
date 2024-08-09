@@ -32,7 +32,7 @@ stages:
         projects: '**/*.sln'
         feedsToUse: 'select'
     - task: DotNetCoreCLI@2
-      displayName: build
+      displayName: test
       inputs:
         command: 'test'
         projects: '**/*.sln'
@@ -44,7 +44,7 @@ stages:
         command: publish
         projects: '**/PigLatinBlazor.csproj' #set to the webapp project name
         publishWebProjects: false
-        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
         zipAfterPublish: True 
     - publish: $(Build.ArtifactStagingDirectory)
       artifact: drop
