@@ -26,20 +26,23 @@ stages:
     displayName: Build Stage
     steps:
     - task: DotNetCoreCLI@2
+      displayName: restore
       inputs:
         command: 'restore'
         projects: '**/*.sln'
         feedsToUse: 'select'
     - task: DotNetCoreCLI@2
+      displayName: build
       inputs:
         command: 'test'
         projects: '**/*.sln'
         arguments: '--configuration Release' #$(buildConfiguration)
  
     - task: DotNetCoreCLI@2 #https://learn.microsoft.com/en-us/training/modules/create-release-pipeline/5-deploy-to-appservice
+      displayName: 'package and publish'
       inputs:
         command: publish
-        projects: '**/BlazorWebApp.csproj' #set to the webapp project name
+        projects: '**/PigLatinBlazor.csproj' #set to the webapp project name
         publishWebProjects: false
         arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
         zipAfterPublish: True 
