@@ -34,5 +34,30 @@ stages:
       inputs:
         command: 'test'
         projects: '**/*.sln'
-        arguments: '--configuration Release'
+        arguments: '--configuration Release' #$(buildConfiguration)
  
+    - task: DotNetCoreCLI@2 #https://learn.microsoft.com/en-us/training/modules/create-release-pipeline/5-deploy-to-appservice
+      inputs:
+        command: publish
+        projects: '**/BlazorWebApp.csproj' #set to the webapp project name
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: True 
+    - publish: $(Build.ArtifactStagingDirectory)
+      artifact: drop
+      
+- stage: Deploy_to_Test
+  displayName: Deploy to Test Stage
+  jobs:
+  - job: Deploy
+    displayName: Deploy Stage
+    steps:
+    - download: current
+      artifact: drop
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: 'Azure subscription 1(5b2d29c4-2e1c-4bfc-9da0-f0226643249b)'
+        appType: 'webApp'
+        appName: 'PigLatinTesting'
+        package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+
